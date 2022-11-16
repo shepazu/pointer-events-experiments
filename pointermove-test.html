@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👉</text></svg>">
+
+  <title>SVG Using Pointer Events Demo</title>
+  <style>
+    main {
+      display: flex;
+      gap: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div id="html_canvas" style="width: 300px; height: 300px; border:solid black 1px; touch-action:none">
+      <span style="margin: calc(50% - 35px); width: 70px; height: 70px; background-color: black; touch-action:none; display: block;"> </span>
+    </div>  
+    
+    <svg id="svg_canvas" width="300" height="300" style="border:solid black 1px; touch-action:none">
+      <circle cx="150" cy="150" r="40" fill="blue"/>
+    </svg>
+  </main>
+
+<script type="text/javascript">
+  window.addEventListener('load', startup );
+
+  function startup() {
+    var svg_canvas = document.getElementById("svg_canvas");
+    svg_canvas.addEventListener("pointerdown", handleStart, false);
+    svg_canvas.addEventListener("pointerup", handleEnd, false);
+    svg_canvas.addEventListener("pointercancel", handleCancel, false);
+    svg_canvas.addEventListener("pointermove", handleMove, false);
+    // el.addEventListener("mousemove", handleMove, false);
+
+    var html_canvas = document.getElementById("html_canvas");
+    html_canvas.addEventListener("pointerdown", handleStart, false);
+    html_canvas.addEventListener("pointerup", handleEnd, false);
+    html_canvas.addEventListener("pointercancel", handleCancel, false);
+    html_canvas.addEventListener("pointermove", handleMove, false);
+  } 
+
+  var ongoingTouches = []; 
+
+  function handleStart(evt) {       
+    ongoingTouches.push(copyTouch(evt));
+  } 
+
+  function handleMove(evt) {
+    const target = evt.target;
+    const originalTarget = evt.originalTarget;
+    const relatedTarget = evt.relatedTarget;
+
+    // console.groupCollapsed(originalTarget.id);
+    if (target && target.id !== 'html_canvas' && target.id !== 'svg_canvas' ) {
+      console.warn('target', target.localName);
+      console.log('event', evt);
+    } else {
+      console.log('target', target.localName);
+    }
+
+    if (originalTarget && originalTarget.id !== 'html_canvas' && originalTarget.id !== 'svg_canvas') {
+      console.warn('originalTarget', originalTarget.localName);
+    } else {
+      console.log('originalTarget', originalTarget.localName);
+    }
+
+    if (relatedTarget && relatedTarget.id !== 'html_canvas' && relatedTarget.id !== 'svg_canvas') {
+      console.warn('relatedTarget', relatedTarget.localName);
+    } else if (relatedTarget) {
+      console.log('relatedTarget', relatedTarget.localName);
+    } else {
+      console.log('no relatedTarget');
+    }
+
+    // console.groupEnd();
+
+    var idx = ongoingTouchIndexById(evt.pointerId);
+    if (idx >= 0) {
+      ongoingTouches.splice(idx, 1, copyTouch(evt));  // swap in the new touch record
+    } else {
+      // console.log("can't figure out which touch to continue: idx = " + idx);
+    }
+  } 
+
+  function handleEnd(evt) {
+    var idx = ongoingTouchIndexById(evt.pointerId);
+    if (idx >= 0) {
+      ongoingTouches.splice(idx, 1);  // remove it; we're done
+    } else {
+      console.log("can't figure out which touch to end");
+    }
+  } 
+
+  function handleCancel(evt) {
+    console.log("pointercancel: id = " + evt.pointerId);
+    var idx = ongoingTouchIndexById(evt.pointerId);
+    ongoingTouches.splice(idx, 1);  // remove it; we're done
+  } 
+  
+
+  function copyTouch(touch) {
+    return { identifier: touch.pointerId, pageX: touch.clientX, pageY: touch.clientY };
+  } 
+
+  function ongoingTouchIndexById(idToFind) {
+    for (var i = 0; i < ongoingTouches.length; i++) {
+      var id = ongoingTouches[i].identifier;
+      
+      if (id == idToFind) {
+        return i;
+      }
+    }
+    return -1;    // not found
+  } 
+
+</script>
+</body>
+</html>
