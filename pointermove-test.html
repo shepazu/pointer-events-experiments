@@ -50,6 +50,9 @@
   var ongoingTouches = []; 
 
   function handleStart(evt) {       
+    const target = evt.target;
+    console.warn(`${evt.type} target`, target.localName);
+
     ongoingTouches.push(copyTouch(evt));
   } 
 
@@ -61,20 +64,20 @@
 
     console.groupCollapsed(target.id);
     if (target && target.id !== 'html_canvas' && target.id !== 'svg_canvas' ) {
-      console.warn('target', target.localName);
+      console.warn(`${evt.type} target`, target.localName);
       // console.log('event', evt);
     } else {
       console.log('target', target.localName);
     }
 
     if (currentTarget && currentTarget.id !== 'html_canvas' && currentTarget.id !== 'svg_canvas') {
-      console.warn('currentTarget', currentTarget.localName);
+      console.warn(`${evt.type} currentTarget`, currentTarget.localName);
     } else {
       console.log('currentTarget', currentTarget.localName);
     }
 
     if (relatedTarget && relatedTarget.id !== 'html_canvas' && relatedTarget.id !== 'svg_canvas') {
-      console.warn('relatedTarget', relatedTarget.localName);
+      console.warn(`${evt.type} relatedTarget`, relatedTarget.localName);
     } else if (relatedTarget) {
       console.log('relatedTarget', relatedTarget.localName);
     } else {
@@ -82,7 +85,7 @@
     }
 
     if (originalTarget && originalTarget.id !== 'html_canvas' && originalTarget.id !== 'svg_canvas') {
-      console.warn('originalTarget', originalTarget.localName);
+      console.warn(`${evt.type} originalTarget`, originalTarget.localName);
     } else if (relatedTarget) {
       console.log('originalTarget', originalTarget.localName);
     } else {
@@ -105,24 +108,22 @@
     const relatedTarget = evt.relatedTarget;
     const originalTarget = evt.originalTarget;
 
-    console.warn('event type', evt.type);
-
-    // console.groupCollapsed(originalTarget.id);
+    console.groupCollapsed(target.id);
     if (target && target.id !== 'html_canvas' && target.id !== 'svg_canvas' ) {
-      console.warn('target', target.localName);
+      console.warn(`${evt.type} target`, target.localName);
       // console.log('event', evt);
     } else {
       console.log('target', target.localName);
     }
 
     if (currentTarget && currentTarget.id !== 'html_canvas' && currentTarget.id !== 'svg_canvas') {
-      console.warn('currentTarget', currentTarget.localName);
+      console.warn(`${evt.type} currentTarget`, currentTarget.localName);
     } else {
       console.log('currentTarget', currentTarget.localName);
     }
 
     if (relatedTarget && relatedTarget.id !== 'html_canvas' && relatedTarget.id !== 'svg_canvas') {
-      console.warn('relatedTarget', relatedTarget.localName);
+      console.warn(`${evt.type} relatedTarget`, relatedTarget.localName);
     } else if (relatedTarget) {
       console.log('relatedTarget', relatedTarget.localName);
     } else {
@@ -130,24 +131,20 @@
     }
 
     if (originalTarget && originalTarget.id !== 'html_canvas' && originalTarget.id !== 'svg_canvas') {
-      console.warn('originalTarget', originalTarget.localName);
+      console.warn(`${evt.type} originalTarget`, originalTarget.localName);
     } else if (relatedTarget) {
       console.log('originalTarget', originalTarget.localName);
     } else {
       console.log('no originalTarget');
     }
 
-    // console.groupEnd();
-
-    var idx = ongoingTouchIndexById(evt.pointerId);
-    if (idx >= 0) {
-      ongoingTouches.splice(idx, 1, copyTouch(evt));  // swap in the new touch record
-    } else {
-      // console.log("can't figure out which touch to continue: idx = " + idx);
-    }
+    console.groupEnd();
   } 
 
   function handleEnd(evt) {
+    const target = evt.target;
+    console.warn(`${evt.type} target`, target.localName);
+
     var idx = ongoingTouchIndexById(evt.pointerId);
     if (idx >= 0) {
       ongoingTouches.splice(idx, 1);  // remove it; we're done
