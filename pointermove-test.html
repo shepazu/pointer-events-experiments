@@ -51,8 +51,9 @@
 
   function handleMove(evt) {
     const target = evt.target;
-    const originalTarget = evt.originalTarget;
+    const currentTarget = evt.currentTarget;
     const relatedTarget = evt.relatedTarget;
+    const originalTarget = evt.originalTarget;
 
     // console.groupCollapsed(originalTarget.id);
     if (target && target.id !== 'html_canvas' && target.id !== 'svg_canvas' ) {
@@ -62,10 +63,10 @@
       console.log('target', target.localName);
     }
 
-    if (originalTarget && originalTarget.id !== 'html_canvas' && originalTarget.id !== 'svg_canvas') {
-      console.warn('originalTarget', originalTarget.localName);
+    if (currentTarget && currentTarget.id !== 'html_canvas' && currentTarget.id !== 'svg_canvas') {
+      console.warn('currentTarget', currentTarget.localName);
     } else {
-      console.log('originalTarget', originalTarget.localName);
+      console.log('currentTarget', currentTarget.localName);
     }
 
     if (relatedTarget && relatedTarget.id !== 'html_canvas' && relatedTarget.id !== 'svg_canvas') {
@@ -74,6 +75,14 @@
       console.log('relatedTarget', relatedTarget.localName);
     } else {
       console.log('no relatedTarget');
+    }
+
+    if (originalTarget && originalTarget.id !== 'html_canvas' && originalTarget.id !== 'svg_canvas') {
+      console.warn('originalTarget', originalTarget.localName);
+    } else if (relatedTarget) {
+      console.log('originalTarget', originalTarget.localName);
+    } else {
+      console.log('no originalTarget');
     }
 
     // console.groupEnd();
