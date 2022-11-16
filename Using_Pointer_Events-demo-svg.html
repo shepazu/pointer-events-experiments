@@ -7,9 +7,12 @@
   <title>SVG Using Pointer Events Demo</title>
 </head>
 <body>
-<svg id="canvas" width="600" height="300" style="border:solid black 1px; touch-action:none">
-  <circle cx="300" cy="150" r="40"/>
+<svg id="canvas" width="500" height="300" style="border:solid black 1px; touch-action:none">
+  <circle cx="250" cy="150" r="40" fill="blue"/>
 </svg>
+<div id="html_canvas" style="border:solid black 1px; touch-action:none">
+  <span style="margin: 20px; width: 50px; height: 50px; background-color: black; touch-action:none; display: block;">test </span>
+</div>
 <br>
 <button onclick="startup();">Initialize</button>
 <br>
@@ -19,12 +22,19 @@ Log:
 <script type="text/javascript">
 
 function startup() {
-  var el = document.getElementById("canvas");
-  el.addEventListener("pointerdown", handleStart, false);
-  el.addEventListener("pointerup", handleEnd, false);
-  el.addEventListener("pointercancel", handleCancel, false);
-  el.addEventListener("pointermove", handleMove, false);
+  var canvas = document.getElementById("canvas");
+  canvas.addEventListener("pointerdown", handleStart, false);
+  canvas.addEventListener("pointerup", handleEnd, false);
+  canvas.addEventListener("pointercancel", handleCancel, false);
+  canvas.addEventListener("pointermove", handleMove, false);
   // el.addEventListener("mousemove", handleMove, false);
+
+  var html_canvas = document.getElementById("html_canvas");
+  html_canvas.addEventListener("pointerdown", handleStart, false);
+  html_canvas.addEventListener("pointerup", handleEnd, false);
+  html_canvas.addEventListener("pointercancel", handleCancel, false);
+  html_canvas.addEventListener("pointermove", handleMove, false);
+
   log("initialized.");
 } 
 
@@ -32,7 +42,7 @@ var ongoingTouches = new Array();
 
 function handleStart(evt) {
   log("pointerdown.");
-  var el = document.getElementById("canvas");
+  // var el = document.getElementById("canvas");
   // var ctx = el.getContext("2d");
         
   log("pointerdown: id = " + evt.pointerId);
@@ -46,16 +56,24 @@ function handleStart(evt) {
 } 
 
 function handleMove(evt) {
-  var el = document.getElementById("canvas");
+  // var el = document.getElementById("canvas");
   // var ctx = el.getContext("2d");
   var color = colorForTouch(evt);
   var idx = ongoingTouchIndexById(evt.pointerId);
 
   const target = evt.target;
   if (target.id !== 'canvas') {
-    console.warn(target.localName);
+    console.warn('target', target.localName);
+    console.log('event', evt);
   } else {
-    console.log(target.localName);
+    console.log('target', target.localName);
+  }
+
+  const originalTarget = evt.originalTarget;
+  if (originalTarget.id !== 'canvas') {
+    console.warn('originalTarget', originalTarget.localName);
+  } else {
+    console.log('originalTarget', originalTarget.localName);
   }
 
   log("continuing touch: idx =  " + idx);
@@ -78,7 +96,7 @@ function handleMove(evt) {
 
 function handleEnd(evt) {
   log("pointerup");
-  var el = document.getElementById("canvas");
+  // var el = document.getElementById("canvas");
   // var ctx = el.getContext("2d");
   var color = colorForTouch(evt);
   var idx = ongoingTouchIndexById(evt.pointerId);
