@@ -58,6 +58,7 @@
 
   function handleMove(evt) {
     const target = evt.target;
+    target.releasePointerCapture(evt.pointerId);
     const currentTarget = evt.currentTarget;
     const relatedTarget = evt.relatedTarget;
     const originalTarget = evt.originalTarget;
