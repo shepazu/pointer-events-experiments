@@ -8,6 +8,7 @@
 </head>
 <body>
 <svg id="canvas" width="600" height="300" style="border:solid black 1px; touch-action:none">
+  <circle cx="300" cy="150" r="40"/>
 </svg>
 <br>
 <button onclick="startup();">Initialize</button>
@@ -23,6 +24,7 @@ function startup() {
   el.addEventListener("pointerup", handleEnd, false);
   el.addEventListener("pointercancel", handleCancel, false);
   el.addEventListener("pointermove", handleMove, false);
+  // el.addEventListener("mousemove", handleMove, false);
   log("initialized.");
 } 
 
@@ -48,6 +50,13 @@ function handleMove(evt) {
   // var ctx = el.getContext("2d");
   var color = colorForTouch(evt);
   var idx = ongoingTouchIndexById(evt.pointerId);
+
+  const target = evt.target;
+  if (target.id !== 'canvas') {
+    console.warn(target.localName);
+  } else {
+    console.log(target.localName);
+  }
 
   log("continuing touch: idx =  " + idx);
   if (idx >= 0) {
